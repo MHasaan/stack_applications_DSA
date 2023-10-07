@@ -4,6 +4,7 @@ public class ExpressionEvaluation
     {
         Stack stack = new Stack();
         String[] tokens = expression.trim().split("\\s+");
+
         if(isValidExpression(tokens))
         {
             String token;
@@ -29,8 +30,50 @@ public class ExpressionEvaluation
         {
             throw new IllegalArgumentException("the expression is invalid: " + expression);
         }    
-        return -1; //idk what to do HELPPPP reomove this line and error 
+        return stack.pop(); 
     }
+
+
+
+
+    public static int evaluatePostfix(String expression)
+    {
+        Stack stack = new Stack();
+        String[] tokens = expression.trim().split("\\s+");
+
+        if(isValidExpression(tokens))
+        {
+            String token;
+
+            for (int i = 0; i < tokens.length; i++)
+            {
+                token = tokens[i];
+                
+                if (isOperand(token))
+                {
+                    stack.push(Integer.parseInt(token));
+                } 
+                else if (isOperator(token)) 
+                {
+                    int operand1 = stack.pop();
+                    int operand2 = stack.pop();
+                    int result = performOperation(token, operand1, operand2);
+                    stack.push(result);
+                }
+            }   
+        }
+        else
+        {
+            throw new IllegalArgumentException("the expression is invalid: " + expression);
+        }    
+        return stack.pop(); 
+    }
+
+
+
+
+
+
 
     private static boolean isOperand(String token) 
     {
