@@ -28,7 +28,8 @@ public class ExpressionEvaluation
         else
         {
             throw new IllegalArgumentException("the expression is invalid: " + expression);
-        }     
+        }    
+        return -1; //idk what to do HELPPPP reomove this line and error 
     }
 
     private static boolean isOperand(String token) 
