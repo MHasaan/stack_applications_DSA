@@ -34,8 +34,6 @@ public class ExpressionEvaluation
     }
 
 
-
-
     public static int evaluatePostfix(String expression)
     {
         Stack stack = new Stack();
@@ -55,8 +53,8 @@ public class ExpressionEvaluation
                 } 
                 else if (isOperator(token)) 
                 {
-                    int operand1 = stack.pop();
                     int operand2 = stack.pop();
+                    int operand1 = stack.pop();
                     int result = performOperation(token, operand1, operand2);
                     stack.push(result);
                 }
@@ -146,7 +144,7 @@ public class ExpressionEvaluation
                 } 
                 else 
                 {
-                    return false; // Invalid token
+                    return false;
                 }
             }
 
