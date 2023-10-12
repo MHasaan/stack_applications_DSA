@@ -4,7 +4,7 @@ public class Main {
         String expression = "/ 13 + 7 * 2 - 5 1";
         int result = ExpressionEvaluation.evaluatePrefix(expression);
         
-        System.out.println(14/5);
+        System.out.println();
         System.out.println();
 
         System.out.println("Result: " + result);
