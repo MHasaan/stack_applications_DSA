@@ -1,69 +1,101 @@
-class Node 
-{
-    int data;
-    Node next;
+import java.util.EmptyStackException;
 
-    public Node(int data) 
+class Node<T> 
+{
+    T data;
+    Node<T> next;
+
+    public Node(T data) 
     {
         this.data = data;
         this.next = null;
     }
 }
 
-
-
-class Stack 
+class Stack<T> 
 {
-    private Node top;
-
+    private Node<T> top;   // Head of stack
+    private int N;        // Maximum length of the stack
+    private int n;        // Total nodes in the stack
 
     public Stack() 
     {
         this.top = null;
+        this.N = 10;
     }
 
-
-    public void push(int element)
+    public Stack(int N) 
     {
-        Node newNode = new Node(element);
-        newNode.next = top;
-        top = newNode;
+        this.top = null;
+        this.N = N;
     }
 
-
-    public int pop() 
+    public void push(T element) 
     {
-        if (isEmpty()) 
+        if (!isFull()) 
         {
-            System.out.println("Stack is Empty - Cannot Pop");
-            return -1; // Return a special value to indicate an empty stack
+            Node<T> newNode = new Node<>(element);
+            newNode.next = top;
+            top = newNode;
+            this.n++;
         }
-        int elementToReturn = top.data;
-        top = top.next;
-        return elementToReturn;
+        else 
+        {
+            throw new StackOverflowError("Stack is full");
+        }
     }
 
-
-    public boolean isEmpty() 
+    public T pop()
     {
-        return top == null;
+        if (isEmpty())
+        {
+            throw new EmptyStackException();
+        }
+
+        T valueToReturn = top.data;
+        top = top.next;
+        this.n--;
+
+        return valueToReturn;
+    }
+
+    public T top()      //named it top instead of like peek
+    {
+        if (!isEmpty())
+        {
+            return top.data;
+        }
+        else
+        {
+            throw new EmptyStackException();
+        }
+    }
+
+    public boolean isEmpty()
+    {
+        return n == 0;
+    }
+
+    public boolean isFull()
+    {
+        return n == N;
     }
 
     public boolean isOneLeftInStack()
     {
-        return top.next==null;
+        return n == 1;
     }
-
+    
 
     @Override
-    public String toString() 
+    public String toString()
     {
         StringBuilder result = new StringBuilder();
-        Node current = top;
-        while (current != null) 
+        Node<T> current = top;
+        while (current != null)
         {
             result.append(current.data);
-            if (current.next != null) 
+            if (current.next != null)
             {
                 result.append(" ");
             }

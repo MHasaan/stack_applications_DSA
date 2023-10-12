@@ -2,7 +2,7 @@ public class ExpressionEvaluation
 {
     public static int evaluatePrefix(String expression)
     {
-        Stack stack = new Stack();
+        Stack<Integer> stack = new Stack<>();
         String[] tokens = expression.trim().split("\\s+");
 
         if(isValidExpression(tokens))
@@ -36,7 +36,7 @@ public class ExpressionEvaluation
 
     public static int evaluatePostfix(String expression)
     {
-        Stack stack = new Stack();
+        Stack<Integer> stack = new Stack<>();
         String[] tokens = expression.trim().split("\\s+");
 
         if(isValidExpression(tokens))
@@ -68,7 +68,7 @@ public class ExpressionEvaluation
     }
 
 
-
+    
 
 
 
@@ -150,6 +150,60 @@ public class ExpressionEvaluation
 
             //validity based on number of operand and operators
             return operandCount == operatorCount + 1;
+        }
+    }
+
+
+
+
+
+
+
+
+    public static String infixToPostfix(String expression) 
+    {
+        StringBuilder postfixConvertedExpression = new StringBuilder();
+        Stack<String> operatorStack = new Stack<>();
+
+        String[] tokens = expression.trim().split("\\s+");
+
+        for (String token : tokens) 
+        {
+            if (isOperand(token)) 
+            {
+                postfixConvertedExpression.append(token).append(" ");
+            } 
+            else if (isOperator(token)) 
+            {
+                while (!operatorStack.isEmpty() && precedence(token) <= precedence(operatorStack.top())) 
+                {
+                    postfixConvertedExpression.append(operatorStack.pop()).append(" ");
+                }
+                operatorStack.push(token);
+            }
+        }
+
+        while (!operatorStack.isEmpty()) 
+        {
+            postfixConvertedExpression.append(operatorStack.pop()).append(" ");
+        }
+
+        return postfixConvertedExpression.toString().trim();
+}
+
+
+    private static int precedence(String c) 
+    {
+        switch (c)
+        {
+            case "+":
+            case "-":
+                return 1;
+            case "*":
+            case "/":
+                return 2;
+            default:
+                return 0;
         }
     }
 }
