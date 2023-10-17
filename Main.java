@@ -9,11 +9,10 @@ public class Main {
 
         System.out.println("Result: " + result);
 
-        expression = ExpressionEvaluation.infixToPostfix("6 / 2 + 14 / 5 * 10");
-
+        expression = ExpressionEvaluation.infixToPostfix("6 * ( 2 - 3 ) * 5 + 5");
         System.out.println(expression);
+
         result = ExpressionEvaluation.evaluatePostfix(expression);
-        
         System.out.println();
         System.out.println();
 

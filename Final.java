@@ -108,6 +108,7 @@ class Stack<T>
 
 
 
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -149,7 +150,7 @@ class ExpressionEvaluation
         return stack.pop(); 
     }
 
-
+///////////////////////////////////////////////////////////////////
     public static int evaluatePostfix(String expression)
     {
         Stack<Integer> stack = new Stack<>();
@@ -183,12 +184,104 @@ class ExpressionEvaluation
         return stack.pop(); 
     }
 
+///////////////////////////////////////////////////////////////////
+    public static String infixToPostfix(String expression) 
+    {
+        String postfixConvertedExpression = "";
+        Stack<String> operatorStack = new Stack<>();
 
-    
+        String[] tokens = expression.trim().split("\\s+");
+
+        for (String token : tokens) 
+        {
+            if (isOperand(token)) 
+            {
+                postfixConvertedExpression += token + " ";
+            }
+
+            else if (isOperator(token)) 
+            {
+                while (!operatorStack.isEmpty() && isOperator(operatorStack.top()) && precedence(token) <= precedence(operatorStack.top())) 
+                {
+                    postfixConvertedExpression += operatorStack.pop() + " ";
+                }
+                operatorStack.push(token);  //Stack 1+_ 2+_ 1*_ 1/
+            }                               //string n n 1+ n n 1* 2+
+            else if(token == "(")
+            {
+                operatorStack.push(token);
+            }
+            else if(token == ")")
+            {
+                while( !operatorStack.isEmpty() && operatorStack.top() == ")")
+		{
+                    postfixConvertedExpression += operatorStack.pop() + " ";
+		}
+                if( !operatorStack.isEmpty() && operatorStack.top() == "(")
+                {
+                    operatorStack.pop();
+                }
+
+            }
+        }
+
+        while (!operatorStack.isEmpty()) 
+        {
+            postfixConvertedExpression += operatorStack.pop() + " ";
+        }
+
+        return postfixConvertedExpression.trim();
+    }
 
 
+///////////////////////////////////////////////////////////////////
+    public static boolean isValidExpression(String[] tokens) 
+    {
+        if (tokens.length == 0)
+        {
+            return false;
+        }
+        else
+        {
+            int operandCount = 0;
+            int operatorCount = 0;
+            int paranthesisCount = 0;
+
+            for (String token : tokens) 
+            {
+                if (isOperand(token)) 
+                {
+                    operandCount++;
+                } 
+                else if (isOperator(token)) 
+                {
+                    operatorCount++;
+                } 
+                else if (token == "(")
+                {
+                    paranthesisCount++;
+                }
+                else if (token == ")")
+                {
+                    paranthesisCount--;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            if( paranthesisCount != 0 )
+            {
+                return false;
+            }
+            //validity based on number of operand and operators
+            return operandCount == operatorCount + 1;
+        }
+    }
 
 
+///////////////////////////////////////////////////////////////////
     private static boolean isOperand(String token) 
     {
         try 
@@ -236,77 +329,7 @@ class ExpressionEvaluation
                 throw new IllegalArgumentException("Invalid operator: " + operator);
         }
     }
-
-    public static boolean isValidExpression(String[] tokens) 
-    {
-        if (tokens.length == 0)
-        {
-            return false;
-        }
-        else
-        {
-            int operandCount = 0;
-            int operatorCount = 0;
-
-            for (String token : tokens) 
-            {
-                if (isOperand(token)) 
-                {
-                    operandCount++;
-                } 
-                else if (isOperator(token)) 
-                {
-                    operatorCount++;
-                } 
-                else 
-                {
-                    return false;
-                }
-            }
-
-            //validity based on number of operand and operators
-            return operandCount == operatorCount + 1;
-        }
-    }
-
-
-
-
-
-
-
-
-    public static String infixToPostfix(String expression) 
-    {
-        StringBuilder postfixConvertedExpression = new StringBuilder();
-        Stack<String> operatorStack = new Stack<>();
-
-        String[] tokens = expression.trim().split("\\s+");
-
-        for (String token : tokens) 
-        {
-            if (isOperand(token)) 
-            {
-                postfixConvertedExpression.append(token).append(" ");
-            } 
-            else if (isOperator(token)) 
-            {
-                while (!operatorStack.isEmpty() && precedence(token) <= precedence(operatorStack.top())) 
-                {
-                    postfixConvertedExpression.append(operatorStack.pop()).append(" ");
-                }
-                operatorStack.push(token);
-            }
-        }
-
-        while (!operatorStack.isEmpty()) 
-        {
-            postfixConvertedExpression.append(operatorStack.pop()).append(" ");
-        }
-
-        return postfixConvertedExpression.toString().trim();
-}
-
+    
 
     private static int precedence(String c) 
     {
@@ -325,12 +348,15 @@ class ExpressionEvaluation
 }
 
 
+
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 
 
-public class Main {
+
+public class Final {
     public static void main(String[] args) 
     {
         String expression = "/ 13 + 7 * 2 - 5 1";
@@ -341,11 +367,10 @@ public class Main {
 
         System.out.println("Result: " + result);
 
-        expression = ExpressionEvaluation.infixToPostfix("6 / 2 + 14 / 5 * 10");
-
+        expression = ExpressionEvaluation.infixToPostfix("6 * ( 2 - 3 ) * 5 + 5");
         System.out.println(expression);
+
         result = ExpressionEvaluation.evaluatePostfix(expression);
-        
         System.out.println();
         System.out.println();
 
