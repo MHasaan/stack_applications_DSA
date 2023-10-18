@@ -1,6 +1,5 @@
-//conert this to .java later
 import java.util.EmptyStackException;			//main at end
-
+                                                //only works considering that given expression is well formated eg.(space between all operators and operands)
 class Node<T> 
 {
     T data;
@@ -117,9 +116,9 @@ class Stack<T>
 
 class ExpressionEvaluation
 {
-    public static int evaluatePrefix(String expression)
+    public static float evaluatePrefix(String expression)
     {
-        Stack<Integer> stack = new Stack<>();
+        Stack<Float> stack = new Stack<>();
         String[] tokens = expression.trim().split("\\s+");
 
         if(isValidExpression(tokens))
@@ -132,13 +131,13 @@ class ExpressionEvaluation
                 
                 if (isOperand(token))
                 {
-                    stack.push(Integer.parseInt(token));
+                    stack.push(Float.parseFloat(token));
                 } 
                 else if (isOperator(token)) 
                 {
-                    int operand1 = stack.pop();
-                    int operand2 = stack.pop();
-                    int result = performOperation(token, operand1, operand2);
+                    float operand1 = stack.pop();
+                    float operand2 = stack.pop();
+                    float result = performOperation(token, operand1, operand2);
                     stack.push(result);
                 }
             }   
@@ -151,9 +150,9 @@ class ExpressionEvaluation
     }
 
 ///////////////////////////////////////////////////////////////////
-    public static int evaluatePostfix(String expression)
+    public static float evaluatePostfix(String expression)
     {
-        Stack<Integer> stack = new Stack<>();
+        Stack<Float> stack = new Stack<>();
         String[] tokens = expression.trim().split("\\s+");
 
         if(isValidExpression(tokens))
@@ -166,13 +165,13 @@ class ExpressionEvaluation
                 
                 if (isOperand(token))
                 {
-                    stack.push(Integer.parseInt(token));
+                    stack.push(Float.parseFloat(token));
                 } 
                 else if (isOperator(token)) 
                 {
-                    int operand2 = stack.pop();
-                    int operand1 = stack.pop();
-                    int result = performOperation(token, operand1, operand2);
+                    float operand2 = stack.pop();
+                    float operand1 = stack.pop();
+                    float result = performOperation(token, operand1, operand2);
                     stack.push(result);
                 }
             }   
@@ -214,9 +213,9 @@ class ExpressionEvaluation
             else if(token == ")")
             {
                 while( !operatorStack.isEmpty() && operatorStack.top() == ")")
-		{
+		        {
                     postfixConvertedExpression += operatorStack.pop() + " ";
-		}
+        		}
                 if( !operatorStack.isEmpty() && operatorStack.top() == "(")
                 {
                     operatorStack.pop();
@@ -286,7 +285,7 @@ class ExpressionEvaluation
     {
         try 
         {
-            Integer.parseInt(token);
+            Float.parseFloat(token);
             return true;
         }
         catch (NumberFormatException e) 
@@ -305,7 +304,7 @@ class ExpressionEvaluation
     }
 
     
-    private static int performOperation(String operator, int operand1, int operand2) 
+    private static float performOperation(String operator, float operand1, float operand2)
     {
         // Perform the specified operation
         switch (operator) 
@@ -355,12 +354,13 @@ class ExpressionEvaluation
 
 
 
-
-public class Final {
+//only works considering that given expression is well formated eg.(space between all operators and operands)
+public class Main 
+{
     public static void main(String[] args) 
     {
         String expression = "/ 13 + 7 * 2 - 5 1";
-        int result = ExpressionEvaluation.evaluatePrefix(expression);
+        float result = ExpressionEvaluation.evaluatePrefix(expression);
         
         System.out.println();
         System.out.println();
